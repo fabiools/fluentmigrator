@@ -769,6 +769,11 @@ namespace FluentMigrator.Runner
 
             getExpressions(migration, context);
 
+            foreach (var aug in _serviceProvider.GetServices<IMigrationExpressionAugmenter>())
+            {
+                aug.Augment(context);
+            }
+
             _migrationValidator.ApplyConventionsToAndValidateExpressions(migration, context.Expressions);
             ExecuteExpressions(context.Expressions);
         }
